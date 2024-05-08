@@ -1,17 +1,56 @@
 # camera ip addresses
-camera_UDP_IP   = '192.168.1.175'
+# camera_UDP_IP   = '192.168.1.175'
+# camera_UDP_IP   = '127.0.0.1'
+# camera_UDP_IP   = '10.42.0.10'
+# camera_UDP_IP   = '10.42.0.1'
+# camera_UDP_IP = '192.168.50.2'
+camera_UDP_IP = '192.168.68.114'
 cam_0_UDP_port  = 5000
 cam_1_UDP_port  = 5001
+cam_2_UDP_port  = 5002
+cam_3_UDP_port  = 5003
 
 # viewsheen gimbal
 cam_10_UDP_port  = 5010
 
-usb_mount_command = 'udisksctl mount -b /dev/sda' 
-image_save_path = '/media/{user}/jpgs'
+usb_mount_command = '' 
+image_save_path = '/home/maui/repos/UAV/snapshots'
+
+# Basler USB Camera Parameters
+basler_raw_width = 3840
+basler_raw_height = 2160
+basler_raw_fps = 6
+
+basler_stream_width = 1280
+basler_stream_height = 720
+basler_stream_fps = 6
+
+basler_snapshot_width = 3840
+basler_snapshot_height = 2160
+basler_snapshot_fps = 3
+
+# RPI HQ Camera Parameters
+rpi_raw_width = 3840
+rpi_raw_height = 2160
+rpi_raw_fps = 6
+
+rpi_stream_width = 1280
+rpi_stream_height = 720
+rpi_stream_fps = 6
+
+rpi_snapshot_width = 3840
+rpi_snapshot_height = 2160
+rpi_snapshot_fps = 3
+
+
 
 [mavlink]
 #connection_string = "udpout:192.168.1.175:14445"
-connection_string = "/dev/ttyUSB0"
+# connection_string = "/dev/ttyUSB0"
+#connection = "udpout:192.168.50.2:14445"
+#connection = "udpout:10.42.0.1:14445"
+# connection = "udpout:127.0.0.1:14445"
+connection = "udpout:192.168.68.114:14445"
 
     # con2 = "udpout:192.168.1.175:14445" if mach == 'jetson' else "udpout:localhost:14445"
     # con2 = "/dev/ttyUSB0" if mach == 'jetson' else "/dev/ttyUSB1"

@@ -1,4 +1,4 @@
-cam_name = 'cam_1'
+cam_name = 'cam_2'
 
 [camera_info]
 vendor_name = "John Doe                   "
@@ -24,12 +24,12 @@ yaw = 0.0
 
 [gstreamer_video_src]
 loglevel = 'DEBUG'   # todo add loglevel to all pipelines and to gst_utils
-width = '*basler_raw_width*'
-height = '*basler_raw_height*'
-fps = '*basler_raw_fps*'
+width = '*rpi_raw_width*'
+height = '*rpi_raw_height*'
+fps = '*rpi_raw_fps*'
 
 pipeline = [
-    'pylonsrc device-index=1 ! video/x-raw, width={width}, height={height}, format=YUY2, framerate={fps}/1',
+    'nvarguscamerasrc sensor_id=0 ! video/x-raw(memory:NVMM), width={width}, height={height}, format=NV12, framerate={fps}/1',
     'tee name=t',
     't. ! queue',
     'nvvidconv',  # needs this to isolate the camera from the interpipesink otherwise segfault errors etc
@@ -41,19 +41,19 @@ pipeline = [
 
 [gstreamer_udpsink]
 host = '*camera_UDP_IP*'     # overwrite with server_config.toml
-port = '*cam_1_UDP_port*'    # overwrite with server_config.toml
+port = '*cam_2_UDP_port*'    # overwrite with server_config.toml
 bitrate = 2000000
 
-width = '*basler_stream_width*'
-height = '*basler_stream_height*'
-fps = '*basler_stream_fps*'
+width = '*rpi_stream_width*'
+height = '*rpi_stream_height*'
+fps = '*rpi_stream_fps*'
 
 pipeline = [
     'interpipesrc listen-to={cam_name} is-live=true format=time',
     'queue',
     'nvvidconv',
-    'videorate',  # Add videorate to change the frame rate
-    'video/x-raw,width={width},height={height},framerate={fps}/1',  # Set the new frame rate
+    #'videorate',  # Add videorate to change the frame rate
+    'video/x-raw, width={width},height={height},framerate={fps}/1',  # Set the new frame rate
     'nvvidconv',
     'nvv4l2h264enc bitrate={bitrate}',
     'rtph264pay config-interval=1 ! udpsink host={host} port={port}  sync=false',

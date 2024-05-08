@@ -23,55 +23,52 @@ pitch = 0.0
 yaw = 0.0
 
 [gstreamer_video_src]
-fps = 1
 loglevel = 'DEBUG'   # todo add loglevel to all pipelines and to gst_utils
-
+width = '*basler_raw_width*'
+height = '*basler_raw_height*'
+fps = '*basler_raw_fps*'
 
 pipeline = [
-    "nvarguscamerasrc sensor_id=0 ! video/x-raw(memory:NVMM),width=4032, height=3040, framerate=30/1, format=NV12 ",
-    # 'videorate max-rate={fps} drop-only=true ! queue max-size-buffers=3 leaky=downstream',
+    'pylonsrc device-index=0 ! video/x-raw, width={width}, height={height}, format=YUY2, framerate={fps}/1',
     'tee name=t',
-
-    # "t.",
-    # 'queue leaky=2 ! intervideosink channel={cam_name}  sync=false',
-
-    "t.",
-    'interpipesink name={cam_name} ',
+    't. ! queue',
+    'nvvidconv',  # needs this to isolate the camera from the interpipesink otherwise segfault errors etc
+    'interpipesink name={cam_name} '
 ]
 
 
 # streaming pipelines
 
 [gstreamer_udpsink]
-fps = 2
 host = '*camera_UDP_IP*'     # overwrite with server_config.toml
 port = '*cam_0_UDP_port*'    # overwrite with server_config.toml
-bitrate=2000000
+bitrate = 2000000
+
+width = '*basler_stream_width*'
+height = '*basler_stream_height*'
+fps = '*basler_stream_fps*'
 
 pipeline = [
-    'interpipesrc listen-to={cam_name} is-live=false allow-renegotiation=true format=time',
-    # 'queue max-size-buffers=1 leaky=downstream',
-    'valve name=myvalve drop=False ',
-    # 'videorate max-rate={fps} drop-only=true skip-to-first=true ! video/x-raw(memory:NVMM),framerate={fps}/1',
-    'videorate ! video/x-raw(memory:NVMM),framerate={fps}/1',
-    'nvvidconv ! video/x-raw(memory:NVMM), width=2000, height=1500, format=NV12',
-    # 'queue',
-    'nvv4l2h265enc bitrate={bitrate} iframeinterval=10 insert-sps-pps=true  preset-level=UltraFastPreset EnableTwopassCBR=false maxperf-enable=true',
-    'rtph265pay config-interval=1 ! udpsink host={host} port={port} sync=false async=false',
-    ]
+    'interpipesrc listen-to={cam_name} is-live=true format=time',
+    'queue',
+    'nvvidconv',
+    'videorate',  # Add videorate to change the frame rate
+    'video/x-raw,width={width},height={height},framerate={fps}/1',  # Set the new frame rate
+    'nvvidconv',
+    'nvv4l2h264enc bitrate={bitrate}',
+    'rtph264pay config-interval=1 ! udpsink host={host} port={port}  sync=false',
+]
 
 [gstreamer_jpg_filesink]
-fps = 10   # Frames per second * 10
 quality = 95
-filenames = '%03d.jpg'
+filenames = '%05d.jpg'
 index = 0
 
 pipeline = [
     'interpipesrc listen-to={cam_name} is-live=false allow-renegotiation=true format=time',
     'queue',
-    'videorate drop-only=true skip-to-first=true ! video/x-raw(memory:NVMM), framerate={fps}/20',
+    'videorate drop-only=true skip-to-first=true ! video/x-raw(memory:NVMM), framerate=30/10',
     'nvvidconv ! video/x-raw(memory:NVMM), format=I420',
     'nvjpegenc quality={quality} idct-method=1',
-    'multifilesink location={save_path}/{cam_name}/{filenames} index={index}',
-    ]
-
+    'multifilesink location={save_path}/{cam_name}/{filenames} index={index} max-files=5400',
+]
