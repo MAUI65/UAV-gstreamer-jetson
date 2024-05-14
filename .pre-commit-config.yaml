@@ -1,6 +1,0 @@
-repos:
-- repo: https://github.com/johnnewto/UAV
-  rev: 0.0.3
-  hooks:
-  - id: nbdev_clean
-  - id: nbdev_export
