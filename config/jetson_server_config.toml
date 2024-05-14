@@ -2,27 +2,39 @@
 # camera_UDP_IP   = '192.168.1.175'
 # camera_UDP_IP   = '127.0.0.1'
 # camera_UDP_IP   = '10.42.0.10'
-# camera_UDP_IP   = '10.42.0.1'
-# camera_UDP_IP = '192.168.50.2'
-camera_UDP_IP = '192.168.68.114'
+camera_UDP_IP   = '10.42.0.1'      # GCS PC address
+# camera_UDP_IP = '192.168.50.2'   # GCS PC address
+# camera_UDP_IP = '192.168.68.114' # GCS PC address
 cam_0_UDP_port  = 5000
 cam_1_UDP_port  = 5001
 cam_2_UDP_port  = 5002
 cam_3_UDP_port  = 5003
 
+cam_0_flip_method = 2   #  0=none, 1=rotate-90, 2=rotate-180, 3=rotate-270, 4=horizontal-flip, 5=upper-right-diagonal, 6=vertical-flip, 7=upper-left-diagonal
+cam_1_flip_method = 0
+cam_2_flip_method = 2
+cam_3_flip_method = 2
+
+cam_0_pylon_id = 40407095
+cam_1_pylon_id = 40407090
+
 # viewsheen gimbal
 cam_10_UDP_port  = 5010
 
+UDP_bitrate = 5000000
+
 usb_mount_command = '' 
-image_save_path = '/home/maui/repos/UAV/snapshots'
+image_save_path = 'snapshots'
 
 # Basler USB Camera Parameters
 basler_raw_width = 3840
 basler_raw_height = 2160
 basler_raw_fps = 6
 
-basler_stream_width = 1280
-basler_stream_height = 720
+# basler_stream_width = 1280
+# basler_stream_height = 720
+basler_stream_width = 1920
+basler_stream_height = 1080
 basler_stream_fps = 6
 
 basler_snapshot_width = 3840
@@ -34,8 +46,10 @@ rpi_raw_width = 3840
 rpi_raw_height = 2160
 rpi_raw_fps = 6
 
-rpi_stream_width = 1280
-rpi_stream_height = 720
+# rpi_stream_width = 1280
+# rpi_stream_height = 720
+rpi_stream_width = 1920
+rpi_stream_height = 1080
 rpi_stream_fps = 6
 
 rpi_snapshot_width = 3840
@@ -44,13 +58,10 @@ rpi_snapshot_fps = 3
 
 
 
-[mavlink]
+[mavlink]   # GCS PC address
 #connection_string = "udpout:192.168.1.175:14445"
 # connection_string = "/dev/ttyUSB0"
 #connection = "udpout:192.168.50.2:14445"
-#connection = "udpout:10.42.0.1:14445"
-# connection = "udpout:127.0.0.1:14445"
-connection = "udpout:192.168.68.114:14445"
-
-    # con2 = "udpout:192.168.1.175:14445" if mach == 'jetson' else "udpout:localhost:14445"
-    # con2 = "/dev/ttyUSB0" if mach == 'jetson' else "/dev/ttyUSB1"
+connection = "udpout:10.42.0.1:14445"           # GCS PC address
+# connection = "udpout:127.0.0.1:14445"         # GCS PC address
+# connection = "udpout:192.168.68.114:14445"    # GCS PC address

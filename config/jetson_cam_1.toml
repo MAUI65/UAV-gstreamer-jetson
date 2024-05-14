@@ -24,12 +24,15 @@ yaw = 0.0
 
 [gstreamer_video_src]
 loglevel = 'DEBUG'   # todo add loglevel to all pipelines and to gst_utils
+flip_method = '*cam_1_flip_method*' # overwrite with server_config.toml
+pylon_id = '*cam_1_pylon_id*'
 width = '*basler_raw_width*'
 height = '*basler_raw_height*'
 fps = '*basler_raw_fps*'
 
 pipeline = [
-    'pylonsrc device-index=1 ! video/x-raw, width={width}, height={height}, format=YUY2, framerate={fps}/1',
+    'pylonsrc device-serial-number="{pylon_id}" ! video/x-raw, width={width}, height={height}, format=YUY2, framerate={fps}/1',
+    # 'nvvidconv flip-method={flip_method}',
     'tee name=t',
     't. ! queue',
     'nvvidconv',  # needs this to isolate the camera from the interpipesink otherwise segfault errors etc
@@ -42,7 +45,7 @@ pipeline = [
 [gstreamer_udpsink]
 host = '*camera_UDP_IP*'     # overwrite with server_config.toml
 port = '*cam_1_UDP_port*'    # overwrite with server_config.toml
-bitrate = 2000000
+bitrate = '*UDP_bitrate*'
 
 width = '*basler_stream_width*'
 height = '*basler_stream_height*'
@@ -55,8 +58,9 @@ pipeline = [
     'videorate',  # Add videorate to change the frame rate
     'video/x-raw,width={width},height={height},framerate={fps}/1',  # Set the new frame rate
     'nvvidconv',
-    'nvv4l2h264enc bitrate={bitrate}',
-    'rtph264pay config-interval=1 ! udpsink host={host} port={port}  sync=false',
+    # 'nvv4l2h264enc bitrate={bitrate}',
+    'nvv4l2h264enc bitrate={bitrate} iframeinterval=5 control-rate=1 preset-level=1 profile=2',
+    'rtph264pay config-interval=1 ! udpsink host={host} port={port}  sync=true',
 ]
 
 [gstreamer_jpg_filesink]
