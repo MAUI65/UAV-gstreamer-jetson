@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 USBFS_SIZE=1000  # 1000MB
 

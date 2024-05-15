@@ -1,0 +1,12 @@
+[Unit]
+Description=Increase the usbfs_memory_mb memory for the current session.
+After=rc-local.service
+
+[Service]
+Type=oneshot
+ExecStart=/home/maui/repos/UAV-gstreamer-jetson/scripts/usbfs-1000.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
+

@@ -24,3 +24,7 @@ Alternativily place in .bashrc
 ```bash
 echo 'export LD_PRELOAD=/usr/lib/aarch64-linux-gnu/libgomp.so.1' >> ~/.bashrc
 ```
+
+
+## To Do
+args for running on lan, local or wifi or give ip address.

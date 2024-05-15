@@ -1,9 +1,6 @@
 #!/bin/sh
 echo "pylon "
-CAM=1
-IP=127.0.0.1
-PORT=5000
-FPS=30
+
 GST_DEBUG=3 \
 gst-launch-1.0 pylonsrc ! "video/x-bayer,format=bggr" \
 ! videoconvert \
