@@ -2,11 +2,8 @@
 ## To Do
 1. args for running on lan, local or wifi or give ip address.
 2. snapshot errors on more than 2 cams
-3. copy runserver to ~/bin
+3. copy runserver and rungui to ~/bin
 4. explain how to setup services
-
-
-
 
 # UAV jetson
 
@@ -26,7 +23,12 @@ pip install --upgrade pip
 pip install -e .
 ```
 
-#### Install gstreamer
+If you make a change to the setup.cfg then reinstall  from the `venv`
+``` sh 
+pip install -e .
+```
+
+#### Install gstreamer (might have to do this first?)
 
 ``` sh
 sudo apt-get install libcairo2 libcairo2-dev libgirepository1.0-dev
@@ -34,17 +36,23 @@ sudo apt install libgirepository1.0-dev
 sudo apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgstreamer-plugins-bad1.0-dev gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-tools gstreamer1.0-x gstreamer1.0-alsa gstreamer1.0-gl gstreamer1.0-gtk3 gstreamer1.0-qt5 gstreamer1.0-pulseaudio
 ```
 
-#### Setup Services
+#### Setup Services on the jetson
 
 ``` sh
-./scripts/
+./scripts/setup-services.sh
 ```
-#### Packaging (optional)
-With the above in place, you can now build your package by running `python -m build --wheel` from the folder where the pyproject.toml resides. (You may need to install the build package first: `pip install build`.) This should create a build/ folder as well as a dist/ folder (don’t forget to add these to your .gitignore, if they aren’t in there already!), in which you will find a wheel named something like example-0.1.0-py3-none-any.whl. That file contains your package, and this is all you need to distribute it. You can install this package anywhere by copying it to the relevant machine and running `pip install example-0.1.0-py3-none-any.whl`.
+This sets up 2 services, one the increase the USBFS memory to 1000MB and the other to run the cameras
 
-When developing you probably do not want to re-build and re-install the wheel every time you have made a change to the code, and for that you can use an editable install. This will install your package without packaging it into a file, but by referring to the source directory. You can do so by running `pip install -e .` from the directory where the pyproject.toml resides. Any changes you make to the source code will take immediate effect. But note that you may need to trigger your python to re-import the code, either by restarting your python session, or for example by using autoreload in a Jupyter notebook. Also note that any changes to the configuration of your package (i.e. changes to setup.cfg) will only take effect after re-installing it with `pip install -e .` .
 
-## Use
+
+## Usage on the PC Ground Station
+Run the 4 camera viewer normally on the PC, 
+``` sh
+rungui
+```
+
+
+## Usage on the jetson server
 ``` sh
 runserver -h
 
@@ -129,5 +137,11 @@ INFO   | mavcom.CameraServer  | 14:40:34.417 |[basecomponent.py:123] MainThread 
 INFO   | mavcom.CameraServer  | 14:40:34.418 |[basecomponent.py:123] MainThread | Component Started self.source_component = 103, self.mav_type = 30, self.source_system = 222
 ```
 
+
+
+#### Packaging (optional)
+With the above in place, you can now build your package by running `python -m build --wheel` from the folder where the pyproject.toml resides. (You may need to install the build package first: `pip install build`.) This should create a build/ folder as well as a dist/ folder (don’t forget to add these to your .gitignore, if they aren’t in there already!), in which you will find a wheel named something like example-0.1.0-py3-none-any.whl. That file contains your package, and this is all you need to distribute it. You can install this package anywhere by copying it to the relevant machine and running `pip install example-0.1.0-py3-none-any.whl`.
+
+When developing you probably do not want to re-build and re-install the wheel every time you have made a change to the code, and for that you can use an editable install. This will install your package without packaging it into a file, but by referring to the source directory. You can do so by running `pip install -e .` from the directory where the pyproject.toml resides. Any changes you make to the source code will take immediate effect. But note that you may need to trigger your python to re-import the code, either by restarting your python session, or for example by using autoreload in a Jupyter notebook. Also note that any changes to the configuration of your package (i.e. changes to setup.cfg) will only take effect after re-installing it with `pip install -e .` .
 
 ## Todo
