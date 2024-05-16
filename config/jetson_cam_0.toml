@@ -34,8 +34,6 @@ pipeline = [
     'pylonsrc device-serial-number="{pylon_id}" ! video/x-raw, width={width}, height={height}, format=YUY2, framerate={fps}/1',
     # 'nvvidconv',
     'nvvidconv flip-method={flip_method}',
-    # 'tee name=t',
-    # 't. ! queue',
     # 'nvvidconv',  # needs this to isolate the camera from the interpipesink otherwise segfault errors etc
     'interpipesink name={cam_name} '
 ]

@@ -32,9 +32,7 @@ fps = '*rpi_raw_fps*'
 pipeline = [
     'nvarguscamerasrc sensor_id=0 ! video/x-raw(memory:NVMM), width={width}, height={height}, format=NV12, framerate={fps}/1',
     'nvvidconv flip-method={flip_method}',
-    'tee name=t',
-    't. ! queue',
-    'nvvidconv',  # needs this to isolate the camera from the interpipesink otherwise segfault errors etc
+    # 'nvvidconv',  # needs this to isolate the camera from the interpipesink otherwise segfault errors etc
     'interpipesink name={cam_name} '
 ]
 

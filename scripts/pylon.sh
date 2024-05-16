@@ -2,9 +2,7 @@
 echo "pylon "
 
 GST_DEBUG=3 \
-gst-launch-1.0 pylonsrc ! "video/x-bayer,format=bggr" \
-! videoconvert \
-!fakesink
+gst-launch-1.0 pylonsrc device-index=1 ! videoconvert ! fakesink
 
 # ! videorate max-rate=60 drop-only=true ! queue max-size-buffers=3 leaky=downstream \
 # ! interpipesink name=cam_0 

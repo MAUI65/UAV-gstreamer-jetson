@@ -24,7 +24,7 @@ cam_10_UDP_port  = 5010
 UDP_bitrate = 5000000
 
 usb_mount_command = '' 
-image_save_path = 'snapshots'
+image_save_path = '/home/maui/repos/UAV-gstreamer-jetson/snapshots'   # full path to save images so that works with root user
 
 # Basler USB Camera Parameters
 basler_raw_width = 3840

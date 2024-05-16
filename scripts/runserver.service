@@ -1,0 +1,14 @@
+[Unit]
+Description=run on startup
+After=rc-local.service
+
+[Service]
+Type=simple
+Restart=no
+RestartSec=10
+Environment="LD_LIBRARY_PATH=/opt/pylon/lib:$LD_LIBRARY_PATH"
+ExecStart=/home/maui/repos/UAV-gstreamer-jetson/venv/bin/runserver
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
