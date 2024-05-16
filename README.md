@@ -8,7 +8,7 @@ Download UAV-gstreamer-jetson from github and create a virtual environment
 ``` sh
 mkdir repos
 cd repos
-gt clone https://github.com/MAUI65/UAV-gstreamer-jetson.git
+git clone https://github.com/MAUI65/UAV-gstreamer-jetson.git
 cd UAV-gstreamer-jetson
 python3 -m venv 'venv'
 source ./venv/bin/activate
